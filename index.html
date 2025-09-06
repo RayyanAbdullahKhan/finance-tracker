@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Finance Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Rayyans FIRST Tracker</h1>
+
+    <div class="inputs">
+      <input type="text" id="desc" placeholder="What is it?">
+      <input type="number" id="amt" placeholder="How much?">
+      <button onclick="add(true)">+ Income</button>
+      <button class="exp" onclick="add(false)">- Expense</button>
+    </div>
+
+    <div class="totals">
+      <div class="box green">
+        <h3>Income</h3>
+        <p id="inc">0</p>
+      </div>
+      <div class="box red">
+        <h3>Expenses</h3>
+        <p id="exp">0</p>
+      </div>
+      <div class="box blue">
+        <h3>Balance</h3>
+        <p id="bal">0</p>
+      </div>
+    </div>
+
+    <h2>Transactions</h2>
+    <ul id="list"></ul>
+  </div>
+
+  <script src="script.js"></script>
+
+   <footer>
+      <p>Created by Rayyan — learning web dev</p>
+    </footer>
+  </div>
+
+  
+    <!-- too exuasted to push forward rn bye -->
+
+  <script src="script.js"></script>
+</body>
+</html>

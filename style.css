@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 20px;
+}
+
+.wrapper {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 380px;
+}
+
+.inputs {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.inputs input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+button {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.exp {
+  background: #f44336;
+  color: white;
+}
+
+button:not(.exp) {
+  background: #4caf50;
+  color: white;
+}
+
+.totals {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.box {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.green { background: #4caf50; }
+.red { background: #f44336; }
+.blue { background: #2196f3; }
+
+#list {
+  list-style: none;
+  padding: 0;
+}
+
+#list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.in { background: #e0f7e9; color: #2e7d32; }
+.out { background: #fde0e0; color: #c62828; }
+
+.del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+}
