@@ -9,12 +9,14 @@
   <div class="wrapper">
     <h1>Rayyans FIRST Tracker</h1>
 
-    <div class="inputs">
-      <input type="text" id="desc" placeholder="What is it?">
-      <input type="number" id="amt" placeholder="How much?">
-      <button onclick="add(true)">+ Income</button>
-      <button class="exp" onclick="add(false)">- Expense</button>
-    </div>
+   <div class="inputs">
+  <input type="text" id="desc" placeholder="What is it?">
+  <input type="number" id="amt" placeholder="How much?">
+  <input type="date" id="date"> <!-- NEW date field -->
+  <button onclick="add(true)">+ Income</button>
+  <button class="exp" onclick="add(false)">- Expense</button>
+</div>
+
 
     <div class="totals">
       <div class="box green">
@@ -48,3 +50,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
