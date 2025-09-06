@@ -1,5 +1,7 @@
+// My finance tracker with filters + storage
+
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-let currentFilter = "all";
+let currentFilter = "all"; // default filter = all
 
 function saveData() {
   localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -23,21 +25,20 @@ function renderList() {
 
   const filtered = getFilteredTransactions();
 
-  filtered.forEach((t, i) => {
+  filtered.forEach((t) => {
     const li = document.createElement("li");
+
     li.innerHTML = `<strong>${t.date}</strong> | ${t.desc} : 
       <span style="color:${t.type === "income" ? "green" : "red"}">
         ${t.type === "income" ? "+" : "-"}${t.amount}
       </span>`;
 
-    
     const del = document.createElement("button");
     del.textContent = "x";
     del.onclick = () => {
-      transactions.splice(transactions.indexOf(t), 1);
+      transactions = transactions.filter(x => x !== t);
       saveData();
-      updateTotals(getFilteredTransactions());
-      renderList();
+      renderList(); // re-render with filter still active
     };
 
     li.appendChild(del);
@@ -53,7 +54,6 @@ function add(isIncome) {
   let date = document.getElementById("date").value;
 
   if (!date) {
-    // Default to today's date
     const today = new Date();
     date = today.toISOString().split("T")[0];
   }
@@ -80,7 +80,7 @@ function add(isIncome) {
 
 function setFilter(type) {
   currentFilter = type;
-  renderList();
+  renderList(); // refresh list & totals immediately
 }
 
 function getFilteredTransactions() {
@@ -88,6 +88,7 @@ function getFilteredTransactions() {
     const today = new Date().toISOString().split("T")[0];
     return transactions.filter(t => t.date === today);
   }
+
   if (currentFilter === "month") {
     const now = new Date();
     const thisMonth = now.getMonth();
@@ -97,8 +98,9 @@ function getFilteredTransactions() {
       return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
     });
   }
-  return transactions; // default "all"
+
+  return transactions; // default = all
 }
 
-
+// initialize on load
 renderList();
