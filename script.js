@@ -1,68 +1,70 @@
-// store all transactionas
-let trans = JSON.parse(localStorage.getItem("trans")) || [];
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+function saveData() {
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+}
+
+function updateTotals() {
+  let income = transactions.filter(t => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+  let expense = transactions.filter(t => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
+  let balance = income - expense;
+
+  document.getElementById("inc").textContent = income;
+  document.getElementById("exp").textContent = expense;
+  document.getElementById("bal").textContent = balance;
+}
+
+function renderList() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  transactions.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${t.date} | ${t.desc} : ${t.type === "income" ? "+" : "-"}${t.amount}`;
+    li.style.color = t.type === "income" ? "green" : "red";
+
+    // delete button
+    const del = document.createElement("button");
+    del.textContent = "x";
+    del.onclick = () => {
+      transactions.splice(i, 1);
+      saveData();
+      updateTotals();
+      renderList();
+    };
+
+    li.appendChild(del);
+    list.appendChild(li);
+  });
+}
 
 function add(isIncome) {
-  let desc = document.getElementById("desc").value;
-  let amt = parseFloat(document.getElementById("amt").value);
+  const desc = document.getElementById("desc").value;
+  const amt = parseFloat(document.getElementById("amt").value);
+  const date = document.getElementById("date").value || new Date().toISOString().split("T")[0];
 
-  if (desc === "" || isNaN(amt)) {
-    alert("Please enter details");
+  if (!desc || isNaN(amt)) {
+    alert("Please enter description and amount.");
     return;
   }
 
-  if (!isIncome) amt = -amt;
-
-  let t = {
-    id: Date.now(),
+  transactions.push({
     desc: desc,
-    amt: amt
-  };
-
-  trans.push(t);
-  save();
-  update();
-
-  // clear inputs
-  document.getElementById("desc").value = "";
-  document.getElementById("amt").value = "";
-}
-
-function remove(id) {
-  trans = trans.filter(x => x.id !== id);
-  save();
-  update();
-}
-
-function update() {
-  let list = document.getElementById("list");
-  list.innerHTML = "";
-
-  let inc = 0, exp = 0;
-
-  trans.forEach(x => {
-    let li = document.createElement("li");
-    li.className = x.amt > 0 ? "in" : "out";
-    li.innerHTML = `
-      ${x.desc}: ${x.amt.toFixed(2)}
-      <button class="del" onclick="remove(${x.id})">✖</button>
-    `;
-    list.appendChild(li);
-
-    if (x.amt > 0) inc += x.amt;
-    else exp += x.amt;
+    amount: amt,
+    date: date,
+    type: isIncome ? "income" : "expense"
   });
 
-  document.getElementById("inc").textContent = inc.toFixed(2);
-  document.getElementById("exp").textContent = exp.toFixed(2);
-  document.getElementById("bal").textContent = (inc + exp).toFixed(2);
-}
-// i added this after learning localStorage (probably forgot this due the crazy amount of studying i do, yes im glazing my slef)
+  saveData();
+  updateTotals();
+  renderList();
 
-function save() {
-  localStorage.setItem("trans", JSON.stringify(trans));
+  document.getElementById("desc").value = "";
+  document.getElementById("amt").value = "";
+  document.getElementById("date").value = "";
 }
 
-update();
-// i hate ts i hate java
-let date = new Date().toLocaleString();
-li.textContent = `${type.toUpperCase()}: ${amount} (${date})`;
+updateTotals();
+renderList();
