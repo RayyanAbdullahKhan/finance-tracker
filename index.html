@@ -7,16 +7,15 @@
 </head>
 <body>
   <div class="wrapper">
-    <h1>Rayyans FIRST Tracker</h1>
+    <h1>Rayyan's Finance Tracker</h1>
 
-   <div class="inputs">
-  <input type="text" id="desc" placeholder="What is it?">
-  <input type="number" id="amt" placeholder="How much?">
-  <input type="date" id="date"> <!-- NEW date field -->
-  <button onclick="add(true)">+ Income</button>
-  <button class="exp" onclick="add(false)">- Expense</button>
-</div>
-
+    <div class="inputs">
+      <input type="text" id="desc" placeholder="What is it?">
+      <input type="number" id="amt" placeholder="How much?">
+      <input type="date" id="date">
+      <button onclick="add(true)">+ Income</button>
+      <button class="exp" onclick="add(false)">- Expense</button>
+    </div>
 
     <div class="totals">
       <div class="box green">
@@ -34,18 +33,20 @@
     </div>
 
     <h2>Transactions</h2>
+
+    <!-- Date Filter Controls -->
+    <div class="filters">
+      <button onclick="setFilter('all')">All</button>
+      <button onclick="setFilter('today')">Today</button>
+      <button onclick="setFilter('month')">This Month</button>
+    </div>
+
     <ul id="list"></ul>
   </div>
 
-  <script src="script.js"></script>
-
-   <footer>
-      <p>Created by Rayyan — learning web dev</p>
-    </footer>
-  </div>
-
-  
-    <!-- too exuasted to push forward rn bye -->
+  <footer>
+    <p>Created by Rayyan — learning web dev</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
