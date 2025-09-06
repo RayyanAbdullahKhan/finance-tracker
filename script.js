@@ -1,13 +1,14 @@
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+let currentFilter = "all";
 
 function saveData() {
   localStorage.setItem("transactions", JSON.stringify(transactions));
 }
 
-function updateTotals() {
-  let income = transactions.filter(t => t.type === "income")
+function updateTotals(filtered) {
+  let income = filtered.filter(t => t.type === "income")
     .reduce((sum, t) => sum + t.amount, 0);
-  let expense = transactions.filter(t => t.type === "expense")
+  let expense = filtered.filter(t => t.type === "expense")
     .reduce((sum, t) => sum + t.amount, 0);
   let balance = income - expense;
 
@@ -20,30 +21,42 @@ function renderList() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  transactions.forEach((t, i) => {
-    const li = document.createElement("li");
-    li.textContent = `${t.date} | ${t.desc} : ${t.type === "income" ? "+" : "-"}${t.amount}`;
-    li.style.color = t.type === "income" ? "green" : "red";
+  const filtered = getFilteredTransactions();
 
-    // delete button
+  filtered.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${t.date}</strong> | ${t.desc} : 
+      <span style="color:${t.type === "income" ? "green" : "red"}">
+        ${t.type === "income" ? "+" : "-"}${t.amount}
+      </span>`;
+
+    
     const del = document.createElement("button");
     del.textContent = "x";
     del.onclick = () => {
-      transactions.splice(i, 1);
+      transactions.splice(transactions.indexOf(t), 1);
       saveData();
-      updateTotals();
+      updateTotals(getFilteredTransactions());
       renderList();
     };
 
     li.appendChild(del);
     list.appendChild(li);
   });
+
+  updateTotals(filtered);
 }
 
 function add(isIncome) {
   const desc = document.getElementById("desc").value;
   const amt = parseFloat(document.getElementById("amt").value);
-  const date = document.getElementById("date").value || new Date().toISOString().split("T")[0];
+  let date = document.getElementById("date").value;
+
+  if (!date) {
+    // Default to today's date
+    const today = new Date();
+    date = today.toISOString().split("T")[0];
+  }
 
   if (!desc || isNaN(amt)) {
     alert("Please enter description and amount.");
@@ -58,7 +71,6 @@ function add(isIncome) {
   });
 
   saveData();
-  updateTotals();
   renderList();
 
   document.getElementById("desc").value = "";
@@ -66,5 +78,27 @@ function add(isIncome) {
   document.getElementById("date").value = "";
 }
 
-updateTotals();
+function setFilter(type) {
+  currentFilter = type;
+  renderList();
+}
+
+function getFilteredTransactions() {
+  if (currentFilter === "today") {
+    const today = new Date().toISOString().split("T")[0];
+    return transactions.filter(t => t.date === today);
+  }
+  if (currentFilter === "month") {
+    const now = new Date();
+    const thisMonth = now.getMonth();
+    const thisYear = now.getFullYear();
+    return transactions.filter(t => {
+      const d = new Date(t.date);
+      return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+    });
+  }
+  return transactions; // default "all"
+}
+
+
 renderList();
